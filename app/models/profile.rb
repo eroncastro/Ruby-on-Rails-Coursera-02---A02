@@ -4,6 +4,12 @@ class Profile < ActiveRecord::Base
   validate :only_first_name_or_only_last_name_is_null, :male_cannot_have_first_name_as_sue
   validates :gender, inclusion: { in: ['male', 'female'] }
 
+  scope :get_all_profiles, -> (min, max) do
+    where('birth_year BETWEEN ? AND ?', min, max).order(birth_year: :asc)
+  end
+
+  private
+
   def only_first_name_or_only_last_name_is_null
     return if first_name.present? || last_name.present?
 
